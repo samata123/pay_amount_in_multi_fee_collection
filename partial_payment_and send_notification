@@ -1,0 +1,57 @@
+1) in ajax_multi-fee controller
+2)method pay_capture
+3) in fee_pay_collection record ( net_due should be zero and is_paid=1 and net_ amount= full amount)
+4) in fee_pay_transaction for oarticular record id(can have duplicate also) paid amount is stored.
+5)from fee_pay_item_transcation is_scutom=1( for fee head) and all abot each item records.
+6) for updating total amont-paidamount-consession(fee head added amount)
+
+7)in pay_capyure it self we need to add for push notofication which is in send notofication helper
+8)need to call api;
+9)following is for push notification
+
+			 $active_sms_service = $this->globalSettingsActiveSms;
+            $this->load->helper("email_helper");
+            $this->load->helper("send_notifications_helper");
+            $location = $this->globalSettingsLocation;
+            $fcm_server_key = $this->globalSettingsSystemFCMServerrKey;
+
+                    
+		
+	 $student_name = $stu_rec->name;
+                    $receiver_phone = $stu_rec->parent_phone;
+                    $device_token = $stu_rec->device_token;
+                    $parent_email = $stu_rec->parent_email;
+                    $parent_id = $stu_rec->parent_id;
+                    $parent_name = $stu_rec->father_name . ' ' . $stu_rec->father_lname;
+
+
+
+
+
+
+                        $message = 'Dear Parent, 
+                                        Your have paid the amount fot your child ' . ucfirst($student_name) . ' on ' . $date . ' ' . date("g:i:s A") . '
+                                    Thank you.
+                                    ' . sett('system_name');
+                        $activity = 'child_in';
+                    $msg = $message;
+                    $message = array();
+                    $message_body = $msg;
+                    $message['sms_message'] = $msg;
+                    $message['subject'] = $this->globalSettingsSystemName . "  SCHOOL FEE PAID NOTIFICATIN";
+                    $message['messagge_body'] = $message_body;
+                    $message['to_name'] = $parent_name;
+                    $phone = '9742581121';
+                    $email = 'samatasuma@gmail.com';
+                    $user_details = array();
+                    $user_details = array('user_id' => $parent_id, 'user_type' => 'parent','later_schedule_time'=>date('m-d-Y'),'device_token'=> $device_token);
+                   
+                    if ($device_token != '') {
+                        $user_details['device_details'] = array('token' => $device_token, 'server_key' => $fcm_server_key, 'instance' => CURRENT_INSTANCE);
+                    }
+                $sucesss      = send_school_notification_new($activity, $message, $phone, $email, $user_details);
+
+
+10)in ajax mdel add p.device_tken
+11)in nificatin helper make schedule time as !empty(schedule_time)
+                
